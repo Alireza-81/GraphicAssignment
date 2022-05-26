@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720" prefWidth="1280" stylesheets="@../css/Profile-view.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.graphix.Controllers.ProfileController">
+    <top>
+        <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <padding>
+                <Insets left="60.0" top="60.0" />
+            </padding>
+            <items>
+                <Button mnemonicParsing="false" onAction="#goToMainMenu" prefHeight="63.0" prefWidth="64.0" styleClass="previousButton" />
+                <Label prefHeight="75.0" prefWidth="263.0" styleClass="title" text="Profile Menu" />
+            </items>
+        </ToolBar>
+    </top>
+    <center>
+        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+            <children>
+                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="1280.0">
+                    <children>
+                        <Label styleClass="centerButtons" text="Change Username :" />
+                        <TextField fx:id="newUsername" alignment="CENTER" promptText="New Username">
+                            <font>
+                                <Font size="20.0" />
+                            </font>
+                        </TextField>
+                  <Label fx:id="userError" styleClass="error2" />
+                    </children>
+                </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="1280.0">
+               <children>
+                  <Label styleClass="centerButtons" text="Change Password :" />
+                  <TextField fx:id="newPassword" alignment="CENTER" promptText="New Password">
+                     <font>
+                        <Font size="20.0" />
+                     </font>
+                  </TextField>
+                  <Label fx:id="passError" styleClass="error2" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Button fx:id="removeAccount" mnemonicParsing="false" styleClass="remove" text="Remove Account" onAction="#removeAccount"/>
+               </children>
+            </HBox>
+            </children>
+        </VBox>
+    </center>
+    <bottom>
+        <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+            <children>
+                <Button mnemonicParsing="false" onAction="#applyChanges" prefHeight="150.0" prefWidth="150.0" styleClass="nextButton" text="Apply" />
+            </children>
+        </VBox>
+    </bottom>
+</BorderPane>

@@ -1,0 +1,96 @@
+BorderPane{
+    -fx-background-image: url("../images/profileBackground.png");
+}
+
+ToolBar{
+    -fx-background-color: transparent;
+    -fx-spacing: 390;
+}
+
+HBox{
+    -fx-spacing: 50;
+}
+TextField{
+    -fx-background-color: #26a0ba;
+    -fx-border-width: 5;
+    -fx-border-color: #da5959;
+    -fx-border-radius: 20;
+    -fx-background-radius: 40;
+    -fx-prompt-text-fill: white;
+}
+
+.backButton{
+    -fx-background-image: url("../images/previous.png");
+    -fx-background-size: cover;
+}
+
+.previousButton{
+    -fx-background-image: url("../images/previous.png");
+    -fx-background-size: cover;
+    -fx-background-color: transparent;
+}
+.previousButton:hover{
+    -fx-background-image: url("../images/previous.png");
+    -fx-background-size: cover;
+    -fx-background-color: transparent;
+    -fx-border-color: black;
+    -fx-border-radius: 7;
+    -fx-border-width: 2;
+}
+
+.title{
+    -fx-font-size: 50;
+    -fx-text-fill: black;
+}
+.centerButtons{
+    -fx-font-size: 30;
+    -fx-text-fill: black;
+}
+
+.nextButton{
+    -fx-font-size: 30;
+    -fx-text-fill: white;
+    -fx-background-color: transparent;
+    -fx-background-radius: 100;
+    -fx-border-width: 5;
+    -fx-border-color: white;
+    -fx-border-radius: 100;
+}
+.nextButton:hover{
+    -fx-font-size: 30;
+    -fx-text-fill: white;
+    -fx-background-color: transparent;
+    -fx-background-radius: 100;
+    -fx-border-width: 7;
+    -fx-border-color: green;
+    -fx-border-radius: 100;
+}
+
+.error{
+    -fx-font-size: 30;
+    -fx-text-fill: red;
+}
+
+.error2{
+    -fx-font-size: 15;
+    -fx-text-fill: red;
+}
+
+.remove{
+    -fx-background-color: red;
+    -fx-text-fill: white;
+    -fx-background-radius: 50;
+    -fx-font-size: 20;
+    -fx-border-radius: 50;
+    -fx-border-color: darkred;
+    -fx-border-width: 5;
+}
+.remove:hover{
+    -fx-background-color: red;
+    -fx-text-fill: white;
+    -fx-background-radius: 50;
+    -fx-font-size: 20;
+    -fx-border-radius: 50;
+    -fx-border-color: black;
+    -fx-border-width: 5;
+}

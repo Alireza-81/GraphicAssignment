@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane prefHeight="720" prefWidth="1280" stylesheets="@../css/Main-view.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.graphix.Controllers.MainController">
+
+   <bottom>
+      <ButtonBar prefHeight="75.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <buttons>
+            <Button alignment="CENTER" maxWidth="50.0" minHeight="0.0" minWidth="45.0" mnemonicParsing="false" prefHeight="70.0" prefWidth="70.0" styleClass="profileButton" onAction="#goToProfileMenu"/>
+          <Button alignment="CENTER" mnemonicParsing="false" prefHeight="70.0" prefWidth="70.0" styleClass="leaderboard" />
+        </buttons>
+         <padding>
+            <Insets bottom="5.0" right="10.0" />
+         </padding>
+      </ButtonBar>
+   </bottom>
+   <top>
+      <ToolBar pickOnBounds="false" prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <items>
+          <Button fx:id="exitGame" minWidth="27.0" mnemonicParsing="false" onAction="#backToRegister" prefHeight="41.0" prefWidth="40.0" styleClass="exitButton" />
+            <MenuButton graphicTextGap="100.0" mnemonicParsing="false" prefHeight="41.0" prefWidth="40.0" styleClass="settingsButton">
+              <items>
+                <MenuItem mnemonicParsing="false" text="Volume">
+                     <graphic>
+                        <Slider />
+                     </graphic>
+                  </MenuItem>
+                <MenuItem mnemonicParsing="false" text="Action 2" />
+              </items>
+               <padding>
+                  <Insets bottom="10.0" />
+               </padding>
+            </MenuButton>
+        </items>
+      </ToolBar>
+   </top>
+   <center>
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" styleClass="startGame" text="New Game" onAction="#startGame">
+               <VBox.margin>
+                  <Insets bottom="25.0" right="375.0" />
+               </VBox.margin>
+            </Button>
+            <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" styleClass="startGame" text="Load Game">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <VBox.margin>
+                  <Insets bottom="100.0" right="375.0" />
+               </VBox.margin>
+            </Button>
+         </children>
+      </VBox>
+   </center>
+
+</BorderPane>

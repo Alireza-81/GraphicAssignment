@@ -1,0 +1,80 @@
+.startGame{
+    -fx-font-size: 40;
+    -fx-border-radius: 100;
+    -fx-background-radius: 100;
+    -fx-background-color: #222c41;
+    -fx-border-width: 5;
+    -fx-border-color: #000000;
+    -fx-text-fill: white;
+    -fx-text-alignment: center;
+    -fx-tile-alignment: center;
+}
+.startGame:hover{
+    -fx-background-color: #af9178;
+    -fx-font-size: 40;
+    -fx-text-fill: black;
+    -fx-border-width: 5;
+    -fx-border-color: #FFF;
+    -fx-border-radius: 100;
+    -fx-background-radius: 100;
+}
+
+.profileButton{
+    -fx-background-image: url("../images/profilePhoto.png");
+    -fx-background-size: cover;
+    -fx-border-color: grey;
+    -fx-border-width: 2;
+}
+.profileButton:hover{
+    -fx-background-image: url("../images/profilePhoto.png");
+    -fx-background-size: cover;
+    -fx-border-color: black;
+    -fx-border-width: 3;
+}
+
+.exitButton{
+    -fx-background-image: url("../images/Exit.png");
+    -fx-background-size: cover;
+}
+.exitButton:hover{
+    -fx-background-image: url("../images/Exit2.png");
+    -fx-background-size: cover;
+    -fx-border-width: 3;
+    -fx-border-color: red;
+}
+
+.settingsButton{
+    -fx-background-image: url("../images/settings.png");
+    -fx-background-size: contain;
+    -fx-background-color: white;
+
+}
+.settingsButton:hover{
+    -fx-background-image: url("../images/settings.png");
+    -fx-background-size: contain;
+    -fx-background-color: white;
+    -fx-border-width: 2;
+    -fx-border-color: grey;
+}
+
+.leaderboard{
+    -fx-background-image: url("../images/leaderboard.png");
+    -fx-background-size: cover;
+    -fx-border-color: grey;
+    -fx-border-width: 2;
+}
+
+.leaderboard:hover{
+    -fx-background-image: url("../images/leaderboard.png");
+    -fx-background-size: cover;
+    -fx-border-color: black;
+    -fx-border-width: 3;
+}
+
+BorderPane {
+    -fx-background-image: url("../images/HD-wallpaper-video-game-cuphead.png");
+}
+ToolBar{
+    -fx-background-color: transparent;
+    -fx-spacing: 10;
+}

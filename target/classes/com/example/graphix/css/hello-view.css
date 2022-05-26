@@ -1,0 +1,92 @@
+.salam {
+    -fx-font-size: 75px;
+    -fx-fill: #af9178;
+    -fx-stroke: black;
+    -fx-stroke-width: 2;
+    -fx-stroke-type: outside;
+}
+TextField {
+    -fx-background-color: #222c41;
+    -fx-border-width: 5;
+    -fx-border-color: #000000;
+    -fx-border-radius: 20;
+    -fx-background-radius: 40;
+    -fx-prompt-text-fill: #af9178;
+    -fx-text-alignment: center;
+    -fx-tile-alignment: center;
+    -fx-text-fill: white;
+}
+.secondary-btn {
+    -fx-background-color: #222c41;
+    -fx-border-width: 5;
+    -fx-border-color: #000000;
+    -fx-border-radius: 20;
+    -fx-background-radius: 40;
+    -fx-text-fill: white;
+    -fx-font-size: 15;
+    -fx-text-alignment: center;
+    -fx-tile-alignment: center;
+}
+.secondary-btn:hover {
+    -fx-border-width: 5;
+    -fx-border-radius: 20;
+    -fx-background-radius: 40;
+    -fx-font-size: 15;
+    -fx-text-alignment: center;
+    -fx-tile-alignment: center;
+    -fx-background-color: #af9178;
+    -fx-text-fill: black;
+    -fx-border-color: #FFF;
+}
+
+
+.primary-btn {
+    -fx-background-color: #222c41;
+    -fx-border-width: 5;
+    -fx-border-color: #000000;
+    -fx-border-radius: 20;
+    -fx-background-radius: 40;
+    -fx-font-size: 15;
+    -fx-text-fill: white;
+    -fx-text-alignment: center;
+    -fx-tile-alignment: center;
+}
+.primary-btn:hover{
+    -fx-border-width: 5;
+    -fx-border-radius: 20;
+    -fx-background-radius: 40;
+    -fx-font-size: 15;
+    -fx-text-alignment: center;
+    -fx-tile-alignment: center;
+    -fx-background-color: #af9178;
+    -fx-text-fill: black;
+    -fx-border-color: #FFF;
+}
+
+
+BorderPane {
+    -fx-background-image: url("../images/HD-wallpaper-video-game-cuphead.png");
+}
+
+.usernamePassLabel{
+    -fx-text-fill: white;
+    -fx-font-size: 20;
+    -fx-stroke: black;
+    -fx-stroke-width: 2;
+    -fx-stroke-type: outside;
+}
+
+.message{
+    visibility: false;
+    -fx-border-width: 7;
+    -fx-border-color: #000000;
+    -fx-border-radius: 50;
+    -fx-background-radius: 60;
+    -fx-background-color: #222c41;
+    -fx-font-size: 30;
+    -fx-text-fill: white;
+}
+
+.messageBox{
+
+}

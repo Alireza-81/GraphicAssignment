@@ -1,0 +1,36 @@
+.progressBar{
+    -fx-accent: #006fff;
+}
+
+.progressBarFull{
+    -fx-accent: #f48d07;
+}
+
+.HPFull{
+    -fx-accent: #31f431;
+}
+
+.HPLow{
+    -fx-accent :red
+}
+
+.timer{
+    -fx-font-size: 20;
+    -fx-stroke: black;
+    -fx-stroke-width: 100;
+    -fx-stroke-type: outside;
+    -fx-font-weight: 800;
+}
+
+.BossHPNumber{
+    -fx-font-size: 13;
+    -fx-stroke: black;
+    -fx-stroke-width: 100;
+    -fx-stroke-type: outside;
+    -fx-font-weight: 800;
+    -fx-background-color: orange;
+    -fx-background-radius: 10;
+    -fx-border-color: #b36301;
+    -fx-border-radius: 10;
+    -fx-border-width: 4;
+}
