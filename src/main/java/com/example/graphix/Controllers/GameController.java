@@ -515,12 +515,13 @@ public class GameController {
                                 }
                             }
                             secondsSinceStart[0] = 0;
-                            if (boss.getImage().equals(image.get(7))){
+                            if (boss.getImage().equals(image.get(5))){
                                 velocity.set(-400);
                                 createBulletBos(boss);
                                 bossBulletNum += 1;
                                 group.getChildren().add(boss.bullets.get(bossBulletNum));
                                 shootBossBullet(boss.bullets.get(bossBulletNum), velocity).start();
+                                boss.bullets.get(bossBulletNum).bulletAnimation = shootBossBullet(boss.bullets.get(bossBulletNum), velocity);
                                 secondsSinceStart[0] = 0;
                             }
                             if (boss.getImage().equals(image.get(11))){
@@ -552,6 +553,8 @@ public class GameController {
                             boss.setHP(boss.getHP() - plane.bullets.get(i).getDamage());
                             plane.bullets.remove(plane.bullets.get(i));
                             bulletNum -= 1;
+                            Database.getLoggedInUser().setScore(Database.getLoggedInUser().getScore() + 5);
+                            Score.setText(" Score: " + Database.getLoggedInUser().getScore() + " ");
                             bossReceiveDamageColorAdjust(boss);
                         }
                     }
@@ -564,9 +567,39 @@ public class GameController {
                             group.getChildren().remove(plane.bombs.get(i));
                             boss.setHP(boss.getHP() - plane.bombs.get(i).getDamage());
                             plane.bombs.remove(plane.bombs.get(i));
+                            Database.getLoggedInUser().setScore(Database.getLoggedInUser().getScore() + 10);
+                            Score.setText(" Score: " + Database.getLoggedInUser().getScore() + " ");
                             bombNum -= 1;
                             bossReceiveDamageColorAdjust(boss);
                         }
+                    }
+                }
+                lastUpdateTime.set(l);
+            }
+        };
+        collisionCheck.start();
+    }
+
+    public void checkCollision2(Boss boss, MyPlane plane, Group group){
+        final LongProperty lastUpdateTime = new SimpleLongProperty();
+        final AnimationTimer collisionCheck = new AnimationTimer() {
+            @Override
+            public void handle(long l) {
+                if (lastUpdateTime.get() > 0){
+                    for (int i = 0; i < boss.bullets.size(); i++){
+                        if (boss.bullets.get(i).getTranslateX()  <= plane.getTranslateX() + 50
+                                && boss.bullets.get(i).getTranslateX()  >= plane.getTranslateX()
+                                && boss.bullets.get(i).getTranslateY() >= plane.getTranslateY() - 50
+                                &&  boss.bullets.get(i).getTranslateY() + boss.bullets.get(i).getFitHeight() <= plane.getTranslateY() + 150
+                                ){
+                            boss.bullets.get(i).bulletAnimation.stop();
+                            group.getChildren().remove(boss.bullets.get(i));
+                            plane.setHP(plane.getHP() - 1);
+                            boss.bullets.remove(boss.bullets.get(i));
+                            bossBulletNum -= 1;
+                            planeReceiveDamageColorAdjust(plane);
+                        }
+                        System.out.println("salam");
                     }
                 }
                 lastUpdateTime.set(l);
@@ -579,12 +612,23 @@ public class GameController {
         ColorAdjust colorAdjust = new ColorAdjust();
         colorAdjust.setSaturation(0.8);
         boss.setEffect(colorAdjust);
-        BossHP.setProgress(2 * boss.getHP() / (double) 100);
-        BossHpNumber.setText(" " + boss.getHP() * 2 + "% ");
-        checkBossHp(boss);
         if (boss.getHP() <= 0){
             boss.setHP(0);
         }
+        BossHP.setProgress(2 * boss.getHP() / (double) 100);
+        BossHpNumber.setText(" " + boss.getHP() * 2 + "% ");
+        checkBossHp(boss);
+
+    }
+    private void planeReceiveDamageColorAdjust(MyPlane plane) {
+        ColorAdjust colorAdjust = new ColorAdjust();
+        colorAdjust.setSaturation(0.8);
+        plane.setEffect(colorAdjust);
+        if (plane.getHP() <= 0){
+            plane.setHP(0);
+        }
+        HP.setProgress(plane.getHP() / (double) 10);
+        checkMyHP(plane);
     }
 
     public void checkBossHp(Boss boss){
@@ -596,6 +640,16 @@ public class GameController {
             BossHP.getStyleClass().add("HPFull");
         }
     }
+    public void checkMyHP(MyPlane plane){
+        if (plane.getHP() <= 10){
+            HP.getStyleClass().remove("HPFull");
+            HP.getStyleClass().add("HPLow");
+        } else {
+            HP.getStyleClass().remove("HPLow");
+            HP.getStyleClass().add("HPFull");
+        }
+    }
+
 
 
 
@@ -616,6 +670,11 @@ public class GameController {
 
 
     public void createBackground(){
+        Score.setText(" Score: " + Database.getLoggedInUser().getScore() + " ");
+        Score.setLayoutX(1200);
+        Score.setLayoutY(692);
+        Score.getStylesheets().add(HelloApplication.class.getResource("css/GameController.css").toString());
+        Score.getStyleClass().add("BossHPNumber");
         //========================
         BossHpNumber.setLayoutX(1120);
         BossHpNumber.setLayoutY(5);
@@ -722,8 +781,8 @@ public class GameController {
 
     public void createBulletBos(Boss boss){
         Bullet bullet = new Bullet();
-        bullet.setTranslateX(boss.getTranslateX() - 20);
-        bullet.setTranslateY(boss.getTranslateY() + 150);
+        bullet.setTranslateX(boss.getTranslateX() + 10);
+        bullet.setTranslateY(boss.getTranslateY() + 130);
         URL address = null;
         try{
             address = new URL(HelloApplication.class.getResource("images/BossBullet.png").toString());

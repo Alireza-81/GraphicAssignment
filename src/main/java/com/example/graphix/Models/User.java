@@ -4,6 +4,7 @@ public class User {
     private String username;
     private String password;
     private boolean loggedIn = false;
+    private int score = 0;
 
     public User(String username, String password) {
         this.username = username;
@@ -32,5 +33,13 @@ public class User {
 
     public void setLoggedIn(boolean loggedIn) {
         this.loggedIn = loggedIn;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 }

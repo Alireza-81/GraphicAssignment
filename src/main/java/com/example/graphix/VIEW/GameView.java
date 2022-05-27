@@ -26,7 +26,7 @@ public class GameView {
         //Parent root = loadFXML("gameMenu");
         gameController.createBackground();
         //gameController.createBullet(plane);
-        Pane background = new Pane(gameController.background1, gameController.background2, gameController.weaponTypeImage, gameController.rocketState, gameController.HP, gameController.timer, gameController.BossHP, gameController.BossHpNumber, boss);
+        Pane background = new Pane(gameController.background1, gameController.background2, gameController.weaponTypeImage, gameController.rocketState, gameController.HP, gameController.timer, gameController.BossHP, gameController.BossHpNumber, boss, gameController.Score);
         Group group = new Group(plane, background);
         plane.toFront();
         plane.bullet.setVisible(false);
@@ -36,7 +36,9 @@ public class GameView {
         gameController.setTimeTimer();
         boss.BossAnimation.start();
         gameController.checkCollision1(boss, plane, group);
+        gameController.checkCollision2(boss, plane, group);
         gameController.bossShootAnimation(boss, group);
+        boss.toFront();
     }
 
 
