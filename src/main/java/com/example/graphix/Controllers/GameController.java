@@ -10,6 +10,7 @@ import javafx.beans.property.SimpleLongProperty;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
@@ -20,6 +21,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 import java.io.IOException;
@@ -42,6 +45,7 @@ public class GameController {
     final DoubleProperty miniBossVelocity = new SimpleDoubleProperty();
     static int bulletNum = 0;
     static int bombNum = 0;
+    static int bossBulletNum = 0;
     int weaponType = 0;
     public ImageView weaponTypeImage = new ImageView();
     public ProgressBar rocketState = new ProgressBar();
@@ -53,6 +57,7 @@ public class GameController {
     public ArrayList<MiniBoss> miniBosses = new ArrayList<>();
     public int minutes = 10;
     public int seconds = 0;
+    public boolean BW = false;
 
 
     public void setTimeTimer(){
@@ -158,6 +163,49 @@ public class GameController {
             }
         };
         return bulletAnimation;
+    }
+
+    public AnimationTimer shootBossBullet(Bullet bullet, DoubleProperty velocity){
+        final LongProperty lastUpdateTime = new SimpleLongProperty();
+        final AnimationTimer bulletAnimation = new AnimationTimer() {
+            @Override
+            public void handle(long timestamp) {
+                if (lastUpdateTime.get() > 0) {
+                    final double elapsedSeconds = (timestamp - lastUpdateTime.get()) / 1_000_000_000.0;
+                    final double deltaX = elapsedSeconds * velocity.get();
+                    final double newX = bullet.getTranslateX() + deltaX;
+                    bullet.setTranslateX(newX);
+                }
+                lastUpdateTime.set(timestamp);
+            }
+        };
+        return bulletAnimation;
+    }
+
+    public void bossShootBullet(Boss boss, MyPlane plane, Group group){
+        final DoubleProperty velocity = new SimpleDoubleProperty();
+        final LongProperty lastUpdateTime1 = new SimpleLongProperty();
+        createBulletBos(boss);
+        double[] secondsSinceStart = new double[1];
+        final AnimationTimer bulletAnimation = new AnimationTimer() {
+            @Override
+            public void handle(long timestamp) {
+                if (lastUpdateTime1.get() > 0) {
+                    final double elapsedSeconds = (timestamp - lastUpdateTime1.get()) / 1_000_000_000.0;
+                    secondsSinceStart[0] += elapsedSeconds;
+                    if (secondsSinceStart[0] >= 3){
+                        velocity.set(-400);
+                        createBulletBos(boss);
+                        bossBulletNum += 1;
+                        group.getChildren().add(boss.bullets.get(bossBulletNum));
+                        shootBossBullet(boss.bullets.get(bossBulletNum), velocity).start();
+                        secondsSinceStart[0] = 0;
+                    }
+                }
+                lastUpdateTime1.set(timestamp);
+            }
+        };
+        bulletAnimation.start();
     }
 
     public AnimationTimer dropBombOnKeyPress(Scene scene, Bomb bomb, MyPlane plane){
@@ -386,7 +434,7 @@ public class GameController {
             Image temp = new Image(address.get(i).toString());
             image.add(temp);
         }
-        boss.setImage(image.get(1));
+        boss.setImage(image.get(0));
 
         final LongProperty lastUpdateTime = new SimpleLongProperty();
         final double[] secondsSinceStart = {0};
@@ -396,6 +444,15 @@ public class GameController {
                 if (lastUpdateTime.get() > 0){
                     final double elapsedSeconds = (timestamp - lastUpdateTime.get()) / 1_000_000_000.0;
                     secondsSinceStart[0] += elapsedSeconds;
+                    boolean exists = false;
+                    for (int i = 0; i < 6; i++){
+                        if (boss.getImage().equals(image.get(i))){
+                            exists = true;
+                        }
+                    }
+                    if (!exists) {
+                        boss.setImage(image.get(0));
+                    }
                     if (secondsSinceStart[0] >= 0.14) {
                         for (int i = 0; i< 6; i++) {
                             if (boss.getImage().equals(image.get(i))) {
@@ -412,6 +469,71 @@ public class GameController {
         };
         return BossAnimation;
 
+    }
+
+    public void bossShootAnimation(Boss boss, Group group){
+        final DoubleProperty velocity = new SimpleDoubleProperty();
+        ArrayList<URL> address = new ArrayList<URL>();
+        ArrayList<Image> image = new ArrayList<>();
+        for (int i = 0; i < 12; i++){
+            try{
+                URL temp = new URL(HelloApplication.class.getResource("images/" + (i + 1) + ".png").toString());
+                address.add(temp);
+            } catch (IOException exception){
+                exception.printStackTrace();
+            }
+            Image temp = new Image(address.get(i).toString());
+            image.add(temp);
+        }
+        final LongProperty lastUpdateTime = new SimpleLongProperty();
+        final double[] secondsSinceStart = {0, 0.3};
+        createBulletBos(boss);
+        final AnimationTimer bossShootingAnimation = new AnimationTimer() {
+            @Override
+            public void handle(long timestamp) {
+                if (lastUpdateTime.get() > 0){
+                    final double elapsedSeconds = (timestamp - lastUpdateTime.get()) / 1_000_000_000.0;
+                    secondsSinceStart[0] += elapsedSeconds;
+                    secondsSinceStart[1] += elapsedSeconds;
+                    boolean exists = false;
+                    if (secondsSinceStart[1] >= 3) {
+                        boss.BossAnimation.stop();
+                        for (int i = 0; i < 12; i++){
+                            if (boss.getImage().equals(image.get(i))){
+                                exists = true;
+                            }
+                        }
+                        if (!exists) {
+                            boss.setImage(image.get(0));
+                        }
+                        if (secondsSinceStart[0] >= 0.07) {
+                            for (int i = 0; i < 12; i++) {
+                                if (boss.getImage().equals(image.get(i))) {
+                                    boss.setImage(image.get((i + 1) % 12));
+                                    boss.setEffect(null);
+                                    break;
+                                }
+                            }
+                            secondsSinceStart[0] = 0;
+                            if (boss.getImage().equals(image.get(7))){
+                                velocity.set(-400);
+                                createBulletBos(boss);
+                                bossBulletNum += 1;
+                                group.getChildren().add(boss.bullets.get(bossBulletNum));
+                                shootBossBullet(boss.bullets.get(bossBulletNum), velocity).start();
+                                secondsSinceStart[0] = 0;
+                            }
+                            if (boss.getImage().equals(image.get(11))){
+                                secondsSinceStart[1] = 0;
+                                boss.BossAnimation.start();
+                            }
+                        }
+                    }
+                }
+                lastUpdateTime.set(timestamp);
+            }
+        };
+        bossShootingAnimation.start();
     }
 
     public void checkCollision1(Boss boss, MyPlane plane, Group group){
@@ -460,6 +582,9 @@ public class GameController {
         BossHP.setProgress(2 * boss.getHP() / (double) 100);
         BossHpNumber.setText(" " + boss.getHP() * 2 + "% ");
         checkBossHp(boss);
+        if (boss.getHP() <= 0){
+            boss.setHP(0);
+        }
     }
 
     public void checkBossHp(Boss boss){
@@ -471,9 +596,6 @@ public class GameController {
             BossHP.getStyleClass().add("HPFull");
         }
     }
-
-
-
 
 
 
@@ -588,7 +710,39 @@ public class GameController {
         bullet.setImage(image);
         bullet.setFitHeight(25);
         bullet.setFitWidth(25);
+        ColorAdjust colorAdjust = new ColorAdjust();
+        if (BW){
+            colorAdjust.setSaturation(-1);
+        } else{
+            colorAdjust.setSaturation(0);
+        }
+        bullet.setEffect(colorAdjust);
         plane.bullets.add(bullet);
+    }
+
+    public void createBulletBos(Boss boss){
+        Bullet bullet = new Bullet();
+        bullet.setTranslateX(boss.getTranslateX() - 20);
+        bullet.setTranslateY(boss.getTranslateY() + 150);
+        URL address = null;
+        try{
+            address = new URL(HelloApplication.class.getResource("images/BossBullet.png").toString());
+        } catch (IOException exception){
+            exception.printStackTrace();
+        }
+        Image image = new Image(address.toString());
+        bullet.setImage(image);
+        bullet.setFitHeight(100);
+        bullet.setFitWidth(100);
+        ColorAdjust colorAdjust = new ColorAdjust();
+
+        if (BW){
+            colorAdjust.setSaturation(-1);
+        } else{
+            colorAdjust.setSaturation(0);
+        }
+        bullet.setEffect(colorAdjust);
+        boss.bullets.add(bullet);
     }
 
     public void createBomb(MyPlane plane){
@@ -648,6 +802,7 @@ public class GameController {
 
 
     public void doThingBasedOnInput(Scene scene, MyPlane plane, Bullet bullet, Group group){
+        ColorAdjust colorAdjust = new ColorAdjust();
         //=========================
         final boolean[] isPaused = {false};
         URL address = null;
@@ -757,6 +912,18 @@ public class GameController {
                 }
                 if (keyEvent.getCode() == KeyCode.U){
                     mediaPlayer.play();
+                }
+                if (keyEvent.getCode() == KeyCode.B){
+                    if (colorAdjust.getSaturation() != -1) {
+                        colorAdjust.setSaturation(-1);
+                        BW = true;
+                    } else {
+                        colorAdjust.setSaturation(0);
+                        BW = false;
+                    }
+                    for (Node node : group.getChildren()) {
+                        node.setEffect(colorAdjust);
+                    }
                 }
 
 

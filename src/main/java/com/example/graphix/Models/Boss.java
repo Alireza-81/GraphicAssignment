@@ -9,6 +9,7 @@ public class Boss extends javafx.scene.image.ImageView{
     public ArrayList<Bullet> bullets = new ArrayList<>();
     private int speed = 300;
     public AnimationTimer BossAnimation;
+    public AnimationTimer deathAnimation;
 
     public int getHP() {
         return HP;

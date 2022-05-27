@@ -1,6 +1,7 @@
-package com.example.graphix;
+package com.example.graphix.VIEW;
 
 import com.example.graphix.Controllers.GameController;
+import com.example.graphix.HelloApplication;
 import com.example.graphix.Models.Boss;
 import com.example.graphix.Models.Bullet;
 import com.example.graphix.Models.MyPlane;
@@ -35,6 +36,7 @@ public class GameView {
         gameController.setTimeTimer();
         boss.BossAnimation.start();
         gameController.checkCollision1(boss, plane, group);
+        gameController.bossShootAnimation(boss, group);
     }
 
 
