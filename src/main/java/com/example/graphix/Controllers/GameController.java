@@ -21,13 +21,12 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class GameController {
     @FXML
@@ -36,6 +35,7 @@ public class GameController {
     public ImageView background2;
     int BACKGROUND_WIDTH = 1280;
     ParallelTransition parallelTransition;
+    EndPageController endPageController = new EndPageController();
 
     final DoubleProperty bulletVelocityY = new SimpleDoubleProperty();
     final DoubleProperty bulletVelocityX = new SimpleDoubleProperty();
@@ -43,9 +43,9 @@ public class GameController {
     final DoubleProperty planeVelocityX = new SimpleDoubleProperty();
     final DoubleProperty bombVelocityY = new SimpleDoubleProperty();
     final DoubleProperty miniBossVelocity = new SimpleDoubleProperty();
-    static int bulletNum = 0;
-    static int bombNum = 0;
-    static int bossBulletNum = 0;
+    int bulletNum = 0;
+    int bombNum = 0;
+    int bossBulletNum = 0;
     int weaponType = 0;
     public ImageView weaponTypeImage = new ImageView();
     public ProgressBar rocketState = new ProgressBar();
@@ -60,7 +60,7 @@ public class GameController {
     public boolean BW = false;
 
 
-    public void setTimeTimer(){
+    public AnimationTimer setTimeTimer(){
         final LongProperty lastUpdateTime = new SimpleLongProperty();
         final double[] secondsSinceStart = {0};
         final AnimationTimer setTime = new AnimationTimer() {
@@ -85,7 +85,7 @@ public class GameController {
 
             }
         };
-        setTime.start();
+        return setTime;
     }
 
 
@@ -111,21 +111,8 @@ public class GameController {
         return  planeAnimation;
     }
 
-    public AnimationTimer moveBulletWithPlaneY(Scene scene, MyPlane plane){
-        final double bulletSpeed = plane.getSpeed();
-        final LongProperty lastUpdateTime = new SimpleLongProperty();
-        final AnimationTimer bulletAnimation = new AnimationTimer() {
-            @Override
-            public void handle(long timestamp) {
-                if (lastUpdateTime.get() > 0){
-                    final double elapsedSeconds = (timestamp - lastUpdateTime.get()) / 1_000_000_000.0 ;
-                    final double deltaY = elapsedSeconds * planeVelocityY.get();
-                    plane.bullet.setTranslateY(plane.bullet.getTranslateY() + deltaY);
-                }
-                lastUpdateTime.set(timestamp);
-            }
-        };
-        return bulletAnimation;
+    public void checkEndOfGame(Boss boss){
+
     }
 
     public AnimationTimer movePlaneOnKeyPressX(Scene scene, final MyPlane plane) {
@@ -146,9 +133,12 @@ public class GameController {
         };
         return planeAnimation;
     }
+    Media media = new Media(HelloApplication.class.getResource("Audio/Bullet.mp3").toString());
 
     public AnimationTimer shootBulletOnKeyPress(Scene scene, Bullet bullet, MyPlane plane){
         final double bulletSpeed = bullet.getSpeed();
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.play();
         final LongProperty lastUpdateTime1 = new SimpleLongProperty();
         final AnimationTimer bulletAnimation = new AnimationTimer() {
             @Override
@@ -471,7 +461,7 @@ public class GameController {
 
     }
 
-    public void bossShootAnimation(Boss boss, Group group){
+    public AnimationTimer bossShootAnimation(Boss boss, Group group){
         final DoubleProperty velocity = new SimpleDoubleProperty();
         ArrayList<URL> address = new ArrayList<URL>();
         ArrayList<Image> image = new ArrayList<>();
@@ -518,10 +508,10 @@ public class GameController {
                             if (boss.getImage().equals(image.get(5))){
                                 velocity.set(-400);
                                 createBulletBos(boss);
-                                bossBulletNum += 1;
                                 group.getChildren().add(boss.bullets.get(bossBulletNum));
                                 shootBossBullet(boss.bullets.get(bossBulletNum), velocity).start();
                                 boss.bullets.get(bossBulletNum).bulletAnimation = shootBossBullet(boss.bullets.get(bossBulletNum), velocity);
+                                bossBulletNum += 1;
                                 secondsSinceStart[0] = 0;
                             }
                             if (boss.getImage().equals(image.get(11))){
@@ -534,10 +524,10 @@ public class GameController {
                 lastUpdateTime.set(timestamp);
             }
         };
-        bossShootingAnimation.start();
+        return bossShootingAnimation;
     }
 
-    public void checkCollision1(Boss boss, MyPlane plane, Group group){
+    public AnimationTimer checkCollision1(Boss boss, MyPlane plane, Group group){
         final LongProperty lastUpdateTime = new SimpleLongProperty();
         final AnimationTimer collisionCheck = new AnimationTimer() {
             @Override
@@ -577,10 +567,10 @@ public class GameController {
                 lastUpdateTime.set(l);
             }
         };
-        collisionCheck.start();
+        return collisionCheck;
     }
 
-    public void checkCollision2(Boss boss, MyPlane plane, Group group){
+    public AnimationTimer checkCollision2(Boss boss, MyPlane plane, Group group){
         final LongProperty lastUpdateTime = new SimpleLongProperty();
         final AnimationTimer collisionCheck = new AnimationTimer() {
             @Override
@@ -599,13 +589,12 @@ public class GameController {
                             bossBulletNum -= 1;
                             planeReceiveDamageColorAdjust(plane);
                         }
-                        System.out.println("salam");
                     }
                 }
                 lastUpdateTime.set(l);
             }
         };
-        collisionCheck.start();
+        return collisionCheck;
     }
 
     private void bossReceiveDamageColorAdjust(Boss boss) {
@@ -738,7 +727,7 @@ public class GameController {
         background2.setImage(image);
     }
 
-    public void backGroundInit(){
+    public ParallelTransition backGroundInit(){
         TranslateTransition translateTransition =
                 new TranslateTransition(Duration.millis(5000), background1);
         translateTransition.setFromX(0);
@@ -752,7 +741,7 @@ public class GameController {
         translateTransition2.setInterpolator(Interpolator.LINEAR);
         parallelTransition = new ParallelTransition(translateTransition, translateTransition2);
         parallelTransition.setCycleCount(Animation.INDEFINITE);
-        parallelTransition.play();
+        return parallelTransition;
     }
 
     public void createBullet(MyPlane plane){
@@ -860,7 +849,8 @@ public class GameController {
     }
 
 
-    public void doThingBasedOnInput(Scene scene, MyPlane plane, Bullet bullet, Group group){
+
+    public void doThingBasedOnInput(Scene scene, MyPlane plane, Bullet bullet, Group group, Boss boss){
         ColorAdjust colorAdjust = new ColorAdjust();
         //=========================
         final boolean[] isPaused = {false};
@@ -893,6 +883,11 @@ public class GameController {
         AnimationTimer miniBossAnimation1 = miniBossAnimation(scene, miniBosses.get(1));
         AnimationTimer miniBossAnimation2 = miniBossAnimation(scene, miniBosses.get(2));
         AnimationTimer removeMiniBossAndAdd = removeMiniBossAndAdd(miniBosses, group);
+        AnimationTimer bossShootAnimation = bossShootAnimation(boss,group);
+        AnimationTimer checkCollision1 = checkCollision1(boss, plane, group);
+        AnimationTimer checkCollision2 = checkCollision2(boss, plane, group);
+        AnimationTimer timer = setTimeTimer();
+        ParallelTransition backgroundMove = backGroundInit();
         fillUpProgressBar().start();
         movePlaneY.start();
         movePlaneX.start();
@@ -901,6 +896,12 @@ public class GameController {
         miniBossAnimation1.start();
         miniBossAnimation2.start();
         removeMiniBossAndAdd.start();
+        bossShootAnimation.start();
+        boss.BossAnimation.start();
+        checkCollision1.start();
+        checkCollision2.start();
+        timer.start();
+        backgroundMove.play();
         group.getChildren().add(miniBosses.get(0));
         group.getChildren().add(miniBosses.get(1));
         group.getChildren().add(miniBosses.get(2));
@@ -1000,8 +1001,47 @@ public class GameController {
             }
         });
 
+        final LongProperty lastUpdateTime = new SimpleLongProperty();
+        final AnimationTimer endGame = new AnimationTimer() {
+            @Override
+            public void handle(long l) {
+                if (lastUpdateTime.get() > 0) {
+                    if (boss.getHP() == 0 || HP.getProgress() == 0) {
+                        movePlaneY.stop();
+                        movePlaneX.stop();
+                        removeBullets.stop();
+                        miniBossAnimation.stop();
+                        miniBossAnimation1.stop();
+                        miniBossAnimation2.stop();
+                        removeMiniBossAndAdd.stop();
+                        bossShootAnimation.stop();
+                        checkCollision1.stop();
+                        checkCollision2.stop();
+                        timer.stop();
+                        backgroundMove.stop();
+                        boss.BossAnimation.stop();
+                        mediaPlayer.stop();
+                        isPaused[0] = true;
+                        System.out.println(mediaPlayer.getStatus());
+                        Database.getLoggedInUser().setMinutes(minutes);
+                        Database.getLoggedInUser().setSeconds(seconds);
+                        Database.getLoggedInUser().setProgress(100 - 2*boss.getHP());
+                        if (boss.getHP() == 0) {
+                            HelloApplication.changeMenu("EndPage");
+                        } else{
+                            HelloApplication.changeMenu("LosePage");
+                        }
+                        this.stop();
+                    }
+
+                }
+                lastUpdateTime.set(l);
+            }
+        };
+        endGame.start();
 
     }
+
 
 
 

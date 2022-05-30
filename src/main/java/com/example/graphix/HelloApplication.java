@@ -8,6 +8,8 @@ import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
@@ -17,7 +19,7 @@ import java.net.URL;
 
 public class HelloApplication extends Application {
     public static Scene scene;
-    static GameController gameController = new GameController();
+    public static MediaPlayer mediaPlayer;
     @Override
     public void start(Stage stage) throws IOException {
 
@@ -30,6 +32,9 @@ public class HelloApplication extends Application {
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();
+        Media media = new Media(HelloApplication.class.getResource("Audio/Elevator-music.mp3").toString());
+        mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.play();
     }
 
     public static Parent loadFXML(String name){
@@ -45,6 +50,7 @@ public class HelloApplication extends Application {
     public static void changeMenu(String name){
         Parent root = loadFXML(name);
         HelloApplication.scene.setRoot(root);
+       ;
     }
 
     public static void startGame(){

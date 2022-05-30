@@ -19,8 +19,8 @@ import static com.example.graphix.HelloApplication.loadFXML;
 import static com.example.graphix.HelloApplication.scene;
 
 public class GameView {
-    GameController gameController = new GameController();
     public void initialize(){
+        GameController gameController = new GameController();
         MyPlane plane = gameController.createMyPlane();
         Boss boss = gameController.createBoss();
         //Parent root = loadFXML("gameMenu");
@@ -31,14 +31,8 @@ public class GameView {
         plane.toFront();
         plane.bullet.setVisible(false);
         HelloApplication.scene.setRoot(group);
-        gameController.backGroundInit();
-        gameController.doThingBasedOnInput(HelloApplication.scene, plane, plane.bullet, group);
-        gameController.setTimeTimer();
-        boss.BossAnimation.start();
-        gameController.checkCollision1(boss, plane, group);
-        gameController.checkCollision2(boss, plane, group);
-        gameController.bossShootAnimation(boss, group);
-        boss.toFront();
+        gameController.doThingBasedOnInput(HelloApplication.scene, plane, plane.bullet, group, boss);
+        System.out.println("boos");
     }
 
 

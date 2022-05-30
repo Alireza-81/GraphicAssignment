@@ -24,6 +24,7 @@ public class MainController {
     public void startGame(){
         GameView gameView = new GameView();
         gameView.initialize();
+        HelloApplication.mediaPlayer.stop();
     }
 
 

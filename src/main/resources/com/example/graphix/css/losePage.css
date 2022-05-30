@@ -1,0 +1,59 @@
+AnchorPane{
+    -fx-background-image: url("../images/lossPage.png");
+}
+
+.winLabel{
+    -fx-font-size: 80px;
+    -fx-fill: white;
+    -fx-stroke: black;
+    -fx-stroke-width: 2;
+    -fx-stroke-type: outside;
+    -fx-background-color: orange;
+}
+
+.buttons{
+    -fx-font-size: 20;
+    -fx-border-radius: 100;
+    -fx-background-radius: 100;
+    -fx-background-color: #222c41;
+    -fx-border-width: 5;
+    -fx-border-color: #000000;
+    -fx-text-fill: white;
+    -fx-text-alignment: center;
+    -fx-tile-alignment: center;
+}
+.buttons:hover{
+    -fx-background-color: #af9178;
+    -fx-font-size: 20;
+    -fx-text-fill: black;
+    -fx-border-width: 5;
+    -fx-border-color: #FFF;
+    -fx-border-radius: 100;
+    -fx-background-radius: 100;
+}
+
+.exitButton{
+    -fx-background-image: url("../images/Exit.png");
+    -fx-background-size: cover;
+}
+.exitButton:hover{
+    -fx-background-image: url("../images/Exit2.png");
+    -fx-background-size: cover;
+    -fx-border-width: 3;
+    -fx-border-color: red;
+}
+
+.Wally{
+    -fx-image: url("../images/Wally.png");
+}
+
+.sadCuphead{
+    -fx-image: url("../images/sad.png");
+}
+.showScore{
+    -fx-background-color: white;
+    -fx-border-radius: 30;
+    -fx-background-radius: 100;
+    -fx-border-width: 5;
+    -fx-border-color: grey;
+}

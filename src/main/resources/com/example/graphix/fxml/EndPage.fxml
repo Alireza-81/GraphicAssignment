@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="720.0" maxWidth="1280.0" minHeight="720.0" minWidth="1280.0" prefHeight="720.0" prefWidth="1280.0" styleClass="AnchorPane" stylesheets="@../css/winPage.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.graphix.Controllers.EndPageController">
+   <children>
+      <Text layoutX="830.0" layoutY="120.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="winLabel" text="YOU WON!" />
+      <Text fx:id="Score" fill="#fcf9f9" layoutX="911.0" layoutY="175.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="2.0" styleClass="winScore" text="Score: ---" wrappingWidth="297.1420388272762" />
+      <VBox alignment="CENTER" layoutX="815.0" layoutY="248.0" prefHeight="326.0" prefWidth="428.0" spacing="20.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#startGame1" styleClass="buttons" text="Restart" />
+            <Button mnemonicParsing="false" onAction="#goToMainMenu" styleClass="buttons" text="MainMenu" />
+            <Button mnemonicParsing="false" onAction="#goToProfileMenu" prefHeight="63.0" prefWidth="60.0" styleClass="exitButton" />
+         </children>
+      </VBox>
+      <Button alignment="CENTER" layoutX="956.0" layoutY="209.0" mnemonicParsing="false" onAction="#setScore" prefHeight="37.0" prefWidth="136.0" styleClass="showScore" text="show score &amp; time" />
+      <Text fx:id="ElapsedTime" fill="#fcf9f9" layoutX="45.0" layoutY="102.0" stroke="BLACK" strokeType="OUTSIDE" strokeWidth="2.0" styleClass="winScore" text="Elapsed Time --:--" wrappingWidth="430.9075112393856" />
+   </children>
+</AnchorPane>
