@@ -5,19 +5,11 @@ import com.example.graphix.Models.Database;
 import com.example.graphix.Models.User;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.effect.GaussianBlur;
 import javafx.scene.layout.VBox;
-import javafx.scene.Cursor;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.DialogPane;
-import javafx.scene.paint.Color;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
+
 
 
 public class RegisterController {

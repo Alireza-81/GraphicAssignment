@@ -103,7 +103,6 @@ public class GameController {
                     final double deltaY = elapsedSeconds * planeVelocityY.get();
                     final double newY = Math.max(Math.min(620,plane.getTranslateY() + deltaY), 25);
                     plane.setTranslateY(newY);
-                    //plane.bullet.setTranslateY(newY);
                 }
                 lastUpdateTime.set(timestamp);
             }
@@ -126,7 +125,6 @@ public class GameController {
                     final double deltaX = elapsedSeconds * planeVelocityX.get();
                     final double newX = Math.max(Math.min(1200,plane.getTranslateX() + deltaX), 25);
                     plane.setTranslateX(newX);
-                    //plane.bullet.setTranslateX(newX);
                 }
                 lastUpdateTime.set(timestamp);
             }
@@ -294,7 +292,7 @@ public class GameController {
 
     }
 
-    public AnimationTimer fillUpProgressBar(){
+    public AnimationTimer fillUpProgressBar(Boss boss){
         final LongProperty lastUpdateTime1 = new SimpleLongProperty();
         final LongProperty lastUpdateTime2 = new SimpleLongProperty();
         final AnimationTimer progressAnimation = new AnimationTimer() {
@@ -303,7 +301,7 @@ public class GameController {
                 if (lastUpdateTime1.get() > 0) {
                     final double elapsedSeconds = (timestamp - lastUpdateTime1.get()) / 1_000_000_000.0;
                     final double elapsedSecondsInGame = (timestamp - lastUpdateTime2.get())/1_000_000_000.0;
-                    rocketState.setProgress(Math.min(rocketState.getProgress() + elapsedSeconds / 10, 1));
+                    rocketState.setProgress((50 - boss.getHP())/ (double)50);
                     if (rocketState.getProgress() == 1){
                         rocketState.getStyleClass().remove("progressBar");
                         rocketState.getStyleClass().add("progressBarFull");
@@ -527,6 +525,58 @@ public class GameController {
         return bossShootingAnimation;
     }
 
+    public AnimationTimer checkCollisionMini(ArrayList<MiniBoss> miniBosses, MyPlane plane, Group group){
+        final LongProperty lastUpdateTime = new SimpleLongProperty();
+        final AnimationTimer collisionCheck = new AnimationTimer() {
+            @Override
+            public void handle(long l) {
+                if (lastUpdateTime.get() > 0){
+                    for (int k = 0; k < 3 ;k++) {
+                        for (int i = 0; i < plane.bullets.size(); i++) {
+                            if (miniBosses.get(k).isVisible()) {
+                                if (plane.bullets.get(i).getTranslateX() + plane.bullets.get(i).getFitWidth() >= miniBosses.get(k).getTranslateX()
+                                        && plane.bullets.get(i).getTranslateX() + plane.bullets.get(i).getFitWidth() <= miniBosses.get(k).getTranslateX() + miniBosses.get(k).getFitWidth()
+                                        && plane.bullets.get(i).getTranslateY() + plane.bullets.get(i).getFitHeight() >= miniBosses.get(k).getTranslateY()
+                                        && plane.bullets.get(i).getTranslateY() + plane.bullets.get(i).getFitHeight() <= miniBosses.get(k).getTranslateY() + miniBosses.get(k).getFitHeight() + 10) {
+                                    plane.bullets.get(i).bulletAnimation.stop();
+                                    group.getChildren().remove(plane.bullets.get(i));
+                                    miniBosses.get(k).setHP(miniBosses.get(k).getHP() - plane.bullets.get(i).getDamage());
+                                    if (miniBosses.get(k).getHP() == 0) {
+                                        miniBosses.get(k).setVisible(false);
+                                    }
+                                    plane.bullets.remove(plane.bullets.get(i));
+                                    bulletNum -= 1;
+                                    Database.getLoggedInUser().setScore(Database.getLoggedInUser().getScore() + 1);
+                                    Score.setText(" Score: " + Database.getLoggedInUser().getScore() + " ");
+                                }
+                            }
+                        }
+                        for (int i = 0; i < plane.bombs.size(); i++) {
+                            if (miniBosses.get(k).isVisible()) {
+                                if (plane.bombs.get(i).getTranslateX() + plane.bombs.get(i).getFitWidth() >= miniBosses.get(k).getTranslateX()
+                                        && plane.bombs.get(i).getTranslateX() + plane.bombs.get(i).getFitWidth() <= miniBosses.get(k).getTranslateX() + miniBosses.get(k).getFitWidth()
+                                        && plane.bombs.get(i).getTranslateY() + plane.bombs.get(i).getFitHeight() >= miniBosses.get(k).getTranslateY()
+                                        && plane.bombs.get(i).getTranslateY() + plane.bombs.get(i).getFitHeight() <= miniBosses.get(k).getTranslateY() + miniBosses.get(k).getFitHeight() + 10) {
+                                    plane.bombs.get(i).bombAnimation.stop();
+                                    group.getChildren().remove(plane.bombs.get(i));
+                                    miniBosses.get(k).setHP(miniBosses.get(k).getHP() - plane.bombs.get(i).getDamage());
+                                    if (miniBosses.get(k).getHP() == 0) {
+                                        miniBosses.get(k).setVisible(false);
+                                    }
+                                    plane.bombs.remove(plane.bombs.get(i));
+                                    bombNum -= 1;
+                                    Database.getLoggedInUser().setScore(Database.getLoggedInUser().getScore() + 1);
+                                    Score.setText(" Score: " + Database.getLoggedInUser().getScore() + " ");
+                                }
+                            }
+                        }
+                    }
+                }
+                lastUpdateTime.set(l);
+            }
+        };
+        return collisionCheck;
+    }
     public AnimationTimer checkCollision1(Boss boss, MyPlane plane, Group group){
         final LongProperty lastUpdateTime = new SimpleLongProperty();
         final AnimationTimer collisionCheck = new AnimationTimer() {
@@ -570,12 +620,19 @@ public class GameController {
         return collisionCheck;
     }
 
-    public AnimationTimer checkCollision2(Boss boss, MyPlane plane, Group group){
+    public AnimationTimer checkCollision2(Boss boss, MyPlane plane, Group group, ArrayList<MiniBoss> miniBosses){
         final LongProperty lastUpdateTime = new SimpleLongProperty();
+        AnimationTimer blinker = blinker(plane);
+        double[] secondsSinceStart = {1};
         final AnimationTimer collisionCheck = new AnimationTimer() {
             @Override
             public void handle(long l) {
                 if (lastUpdateTime.get() > 0){
+                    final double elapsedSeconds = (l - lastUpdateTime.get()) / 1_000_000_000.0;
+                    secondsSinceStart[0] += elapsedSeconds;
+                    if (secondsSinceStart[0] > 1){
+                        blinker.stop();
+                    }
                     for (int i = 0; i < boss.bullets.size(); i++){
                         if (boss.bullets.get(i).getTranslateX()  <= plane.getTranslateX() + 50
                                 && boss.bullets.get(i).getTranslateX()  >= plane.getTranslateX()
@@ -587,7 +644,8 @@ public class GameController {
                             plane.setHP(plane.getHP() - 1);
                             boss.bullets.remove(boss.bullets.get(i));
                             bossBulletNum -= 1;
-                            planeReceiveDamageColorAdjust(plane);
+                            planeReceiveDamageColorAdjust(plane, blinker);
+                            secondsSinceStart[0] = 0;
                         }
                     }
                 }
@@ -595,6 +653,96 @@ public class GameController {
             }
         };
         return collisionCheck;
+    }
+
+    public AnimationTimer checkDamage(Boss boss, MyPlane plane, ArrayList<MiniBoss> miniBosses){
+        final LongProperty lastUpdateTime = new SimpleLongProperty();
+        double[] secondsSinceStart = {1};
+        Image nonTransparent = new Image(HelloApplication.class.getResource("images/redPlane.png").toString());
+        AnimationTimer blinker = blinker(plane);
+        final AnimationTimer collisionCheck = new AnimationTimer() {
+            @Override
+            public void handle(long timestamp) {
+                if (lastUpdateTime.get() > 0){
+                    final double elapsedSeconds = (timestamp - lastUpdateTime.get()) / 1_000_000_000.0;
+                    secondsSinceStart[0] += elapsedSeconds;
+                    if (secondsSinceStart[0] > 1) {
+                        blinker.stop();
+                        plane.setImage(nonTransparent);
+                        if (plane.getTranslateX() + plane.getFitWidth() >= boss.getTranslateX()
+                                && plane.getTranslateX() <= boss.getTranslateX() + boss.getFitWidth()
+                                && plane.getTranslateY() + plane.getFitHeight() >= boss.getTranslateY()
+                                && plane.getTranslateY() <= boss.getTranslateY() + boss.getFitHeight()
+                        ) {
+                            plane.setHP(plane.getHP() - 1);
+                            checkMyHP(plane);
+                            planeReceiveDamageColorAdjust(plane, blinker);
+                            secondsSinceStart[0] = 0;
+                        }
+
+                        for (int i = 0; i < 3; i++){
+                            if (plane.getTranslateX() + plane.getFitWidth() >= miniBosses.get(i).getTranslateX()
+                                    && plane.getTranslateX() <= miniBosses.get(i).getTranslateX() +  miniBosses.get(i).getFitWidth()
+                                    && plane.getTranslateY() + plane.getFitHeight() >=  miniBosses.get(i).getTranslateY()
+                                    && plane.getTranslateY() <= miniBosses.get(i).getTranslateY() +  miniBosses.get(i).getFitHeight()
+                            ){
+                                plane.setHP(plane.getHP() - 1);
+                                checkMyHP(plane);
+                                planeReceiveDamageColorAdjust(plane, blinker);
+                                secondsSinceStart[0] = 0;
+                            }
+                        }
+                    }
+                }
+                lastUpdateTime.set(timestamp);
+            }
+        };
+        return collisionCheck;
+    }
+
+    public AnimationTimer blinker(MyPlane plane){
+        final LongProperty lastUpdateTime = new SimpleLongProperty();
+        Image transparent = new Image(HelloApplication.class.getResource("images/planeTransparent.png").toString());
+        Image nonTransparent = new Image(HelloApplication.class.getResource("images/redPlane.png").toString());
+        double[] secondsSinceStart = {0};
+        final AnimationTimer blinker = new AnimationTimer() {
+            @Override
+            public void handle(long timestamp) {
+                if (lastUpdateTime.get() > 0){
+                    final double elapsedSeconds = (timestamp - lastUpdateTime.get()) / 1_000_000_000.0;
+                    secondsSinceStart[0] += elapsedSeconds;
+                    if (secondsSinceStart[0] > 0.1){
+                        plane.setImage(transparent);
+                    } if (secondsSinceStart[0] > 0.2) {
+                        plane.setImage(nonTransparent);
+                    }  if (secondsSinceStart[0] > 0.3){
+                        plane.setImage(transparent);
+                    } if (secondsSinceStart[0] > 0.4) {
+                        plane.setImage(nonTransparent);
+                    }
+                    if (secondsSinceStart[0] > 0.5){
+                        plane.setImage(transparent);
+                    } if (secondsSinceStart[0] > 0.6) {
+                        plane.setImage(nonTransparent);
+                    }
+                    if (secondsSinceStart[0] > 0.7){
+                        plane.setImage(transparent);
+                    } if (secondsSinceStart[0] > 0.8) {
+                        plane.setImage(nonTransparent);
+                    }
+                    if (secondsSinceStart[0] > 0.9){
+                        plane.setImage(transparent);
+                    } if (secondsSinceStart[0] > 1) {
+                        plane.setImage(nonTransparent);
+                        secondsSinceStart[0] = 0;
+                        plane.setImage(nonTransparent);
+                    }
+
+                }
+                lastUpdateTime.set(timestamp);
+            }
+        };
+        return blinker;
     }
 
     private void bossReceiveDamageColorAdjust(Boss boss) {
@@ -609,9 +757,9 @@ public class GameController {
         checkBossHp(boss);
 
     }
-    private void planeReceiveDamageColorAdjust(MyPlane plane) {
+    private void planeReceiveDamageColorAdjust(MyPlane plane, AnimationTimer blinker) {
+        blinker.start();
         ColorAdjust colorAdjust = new ColorAdjust();
-        colorAdjust.setSaturation(0.8);
         plane.setEffect(colorAdjust);
         if (plane.getHP() <= 0){
             plane.setHP(0);
@@ -630,7 +778,7 @@ public class GameController {
         }
     }
     public void checkMyHP(MyPlane plane){
-        if (plane.getHP() <= 10){
+        if (plane.getHP() <= 2){
             HP.getStyleClass().remove("HPFull");
             HP.getStyleClass().add("HPLow");
         } else {
@@ -876,7 +1024,7 @@ public class GameController {
         AnimationTimer movePlaneY = movePlaneOnKeyPressY(scene, plane);
         AnimationTimer movePlaneX = movePlaneOnKeyPressX(scene, plane);
         AnimationTimer removeBullets = removeBulletsThatReachedDest(scene, plane, group);
-        AnimationTimer fillUpRocketState = fillUpProgressBar();
+        AnimationTimer fillUpRocketState = fillUpProgressBar(boss);
         AnimationTimer miniBossGroupMove = miniBossMovement(scene, miniBosses, group);
         miniBossGroupMove.start();
         AnimationTimer miniBossAnimation = miniBossAnimation(scene, miniBosses.get(0));
@@ -885,10 +1033,12 @@ public class GameController {
         AnimationTimer removeMiniBossAndAdd = removeMiniBossAndAdd(miniBosses, group);
         AnimationTimer bossShootAnimation = bossShootAnimation(boss,group);
         AnimationTimer checkCollision1 = checkCollision1(boss, plane, group);
-        AnimationTimer checkCollision2 = checkCollision2(boss, plane, group);
+        AnimationTimer checkCollision2 = checkCollision2(boss, plane, group, miniBosses);
+        AnimationTimer checkMiniCollision = checkCollisionMini(miniBosses, plane,group);
+        AnimationTimer damageCheck = checkDamage(boss, plane, miniBosses);
         AnimationTimer timer = setTimeTimer();
         ParallelTransition backgroundMove = backGroundInit();
-        fillUpProgressBar().start();
+        fillUpRocketState.start();
         movePlaneY.start();
         movePlaneX.start();
         removeBullets.start();
@@ -900,6 +1050,8 @@ public class GameController {
         boss.BossAnimation.start();
         checkCollision1.start();
         checkCollision2.start();
+        checkMiniCollision.start();
+        damageCheck.start();
         timer.start();
         backgroundMove.play();
         group.getChildren().add(miniBosses.get(0));

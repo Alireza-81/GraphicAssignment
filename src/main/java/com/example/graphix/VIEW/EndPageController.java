@@ -32,14 +32,13 @@ public class EndPageController {
 
     public void goToMainMenu(){
         Database.getLoggedInUser().setScore(0);
-        Database.getLoggedInUser().setLoggedIn(false);
         HelloApplication.changeMenu("Main-view");
 
         HelloApplication.mediaPlayer.play();
     }
     public void goToProfileMenu(){
-        Database.getLoggedInUser().setLoggedIn(false);
         Database.getLoggedInUser().setScore(0);
+        Database.getLoggedInUser().setLoggedIn(false);
         HelloApplication.changeMenu("Register-view");
         HelloApplication.mediaPlayer.play();
     }

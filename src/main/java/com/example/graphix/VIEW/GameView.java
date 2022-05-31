@@ -6,17 +6,8 @@ import com.example.graphix.Models.Boss;
 import com.example.graphix.Models.Bullet;
 import com.example.graphix.Models.MyPlane;
 import javafx.scene.Group;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.image.*;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.fxml.FXMLLoader;
 
-import static com.example.graphix.HelloApplication.loadFXML;
-import static com.example.graphix.HelloApplication.scene;
 
 public class GameView {
     public void initialize(){
