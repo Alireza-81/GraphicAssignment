@@ -1,5 +1,6 @@
-package com.example.graphix.Controllers;
+package com.example.graphix.VIEW;
 
+import com.example.graphix.Controllers.ProfileControl;
 import com.example.graphix.HelloApplication;
 import com.example.graphix.Models.Database;
 import javafx.scene.control.Button;
@@ -25,36 +26,11 @@ public class ProfileController {
         }
     }
 
-    public boolean changeUsername(){
-        if (newUsername.getText().equals(Database.getLoggedInUser().getUsername())) {
-            userError.setText("new username cant be the same as the current one!");
-            return false;
-        } else if (newUsername.getText().isBlank()) {
-            userError.setText("username can't be blank");
-            return false;
-        } else {
-            userError.setText("");
-            return true;
-        }
-    }
 
-    public boolean changePassword(){
-        if (newPassword.getText().equals(Database.getLoggedInUser().getPassword())) {
-            passError.setText("new password can't be the same as the current one!");
-            return false;
-        } else if (newPassword.getText().isBlank()){
-            passError.setText("password can't be blank");
-            return false;
-        }
-        else {
-            passError.setText("");
-            return true;
-        }
-    }
 
     public void applyChanges(){
-        boolean first = changePassword();
-        boolean second = changeUsername();
+        boolean first = ProfileControl.changePassword(newPassword, passError);
+        boolean second = ProfileControl.changeUsername(newUsername, userError);
         if(first && second) {
             Database.getLoggedInUser().setPassword(newPassword.getText());
             Database.getLoggedInUser().setUsername(newUsername.getText());

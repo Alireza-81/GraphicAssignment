@@ -1,4 +1,4 @@
-package com.example.graphix.Controllers;
+package com.example.graphix.VIEW;
 
 import com.example.graphix.VIEW.GameView;
 import com.example.graphix.HelloApplication;

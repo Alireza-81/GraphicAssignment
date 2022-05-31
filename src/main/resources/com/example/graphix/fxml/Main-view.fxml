@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="720" prefWidth="1280" stylesheets="@../css/Main-view.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.graphix.Controllers.MainController">
+<BorderPane prefHeight="720" prefWidth="1280" stylesheets="@../css/Main-view.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.graphix.VIEW.MainController">
 
    <bottom>
       <ButtonBar prefHeight="75.0" prefWidth="200.0" BorderPane.alignment="CENTER">

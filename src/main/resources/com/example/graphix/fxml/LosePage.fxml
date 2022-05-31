@@ -7,7 +7,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="720.0" maxWidth="1280.0" minHeight="720.0" minWidth="1280.0" prefHeight="720.0" prefWidth="1280.0" styleClass="AnchorPane" stylesheets="@../css/losePage.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.graphix.Controllers.EndPageController">
+<AnchorPane maxHeight="720.0" maxWidth="1280.0" minHeight="720.0" minWidth="1280.0" prefHeight="720.0" prefWidth="1280.0" styleClass="AnchorPane" stylesheets="@../css/losePage.css" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.graphix.VIEW.EndPageController">
     <children>
         <Text layoutX="451.0" layoutY="120.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="winLabel" text="YOU LOST :(" />
         <VBox alignment="CENTER" layoutX="502.0" layoutY="419.0" prefHeight="298.0" prefWidth="277.0" spacing="20.0">

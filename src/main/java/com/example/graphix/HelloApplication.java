@@ -1,17 +1,12 @@
 package com.example.graphix;
 
-import com.example.graphix.Controllers.GameController;
-import com.example.graphix.Controllers.RegisterController;
+import com.example.graphix.VIEW.RegisterController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -24,7 +19,6 @@ public class HelloApplication extends Application {
     public void start(Stage stage) throws IOException {
 
         Parent root = loadFXML("Register-view");
-        RegisterController.PopUpMessage.setStage(stage);
         RegisterController.setRoot(root);
         Scene scene = new Scene(root);
         HelloApplication.scene = scene;

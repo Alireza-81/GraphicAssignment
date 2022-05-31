@@ -2,6 +2,7 @@ package com.example.graphix.Controllers;
 
 import com.example.graphix.HelloApplication;
 import com.example.graphix.Models.*;
+import com.example.graphix.VIEW.EndPageController;
 import javafx.animation.*;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.LongProperty;
@@ -26,7 +27,6 @@ import javafx.util.Duration;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Calendar;
 
 public class GameController {
     @FXML

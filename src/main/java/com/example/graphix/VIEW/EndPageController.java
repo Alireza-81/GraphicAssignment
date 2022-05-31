@@ -1,4 +1,4 @@
-package com.example.graphix.Controllers;
+package com.example.graphix.VIEW;
 
 import com.example.graphix.HelloApplication;
 import com.example.graphix.Models.Database;
@@ -31,13 +31,16 @@ public class EndPageController {
     }
 
     public void goToMainMenu(){
-        HelloApplication.changeMenu("Main-view");
         Database.getLoggedInUser().setScore(0);
+        Database.getLoggedInUser().setLoggedIn(false);
+        HelloApplication.changeMenu("Main-view");
+
         HelloApplication.mediaPlayer.play();
     }
     public void goToProfileMenu(){
-        HelloApplication.changeMenu("Register-view");
+        Database.getLoggedInUser().setLoggedIn(false);
         Database.getLoggedInUser().setScore(0);
+        HelloApplication.changeMenu("Register-view");
         HelloApplication.mediaPlayer.play();
     }
 }
